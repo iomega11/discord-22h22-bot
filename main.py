@@ -33,7 +33,7 @@ async def on_message(message):
         await message.delete()
         print("Envoi d'un message : ",messageAenvoyer)
         await message.channel.send(messageAenvoyer)
-    elif (message.content.lower().contains('ping')):
+    elif ("ping" in message.content.lower()):
         ignored = False
         await message.channel.send("pong")
     elif (client.user.mentioned_in(message)):
