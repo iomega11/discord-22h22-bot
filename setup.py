@@ -1,2 +1,1 @@
-#! ./bin/bash
-python3 -m pip install discord.py
+pip install discord.py
