@@ -2,6 +2,7 @@
 
 # Necessaire dans la console : python -m pip install discord.py
 
+import os
 import discord
 from datetime import datetime, timedelta
 
