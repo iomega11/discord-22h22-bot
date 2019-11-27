@@ -8,9 +8,9 @@ from datetime import datetime, timedelta
 
 # TOKEN donne autre part
 
-CHANNEL_ID = 648637884555067428
+CHANNEL_22H22_ID = 648637884555067428
 
-pleinDetoiles = "etoiles"
+pleinDetoiles = "°˖✧◝(⁰▿⁰)◜✧˖°"
 
 client = discord.Client()
 
@@ -33,10 +33,13 @@ async def on_message(message):
         await message.delete()
         print("Envoi d'un message : ",messageAenvoyer)
         await message.channel.send(messageAenvoyer)
+    elif (message.content.lower().contains('ping')):
+        ignored = False
+        await message.channel.send("pong")
     elif (client.user.mentioned_in(message)):
         ignored = False
         await message.channel.send(pleinDetoiles)
-    if(message.channel.id == CHANNEL_ID):
+    if(message.channel.id == CHANNEL_22H22_ID):
         ignored = False
         now = datetime.now()
         if(now.hour != 22 or now.minute != 22):
@@ -54,9 +57,5 @@ async def on_ready():
     print('------')
 
 TOKEN = os.environ['TOKEN']
-#TOKEN = 'NjQ5MTQxODY0NzIwNzYwODYy.Xd5qUA.jgMd3_shOzJl8ybkBgFcjn-exPc'
-#TOKEN = 'NjQ5MTQxODY0NzIwNzYwODYy.Xd6PzQ.3NoCs81Gqd8QX3sJ_tOm4eNw_tA'
-#TOKEN = 'NjQ5MTQxODY0NzIwNzYwODYy.Xd6NEw.qb2i8TPUkTWoNPaPRnlCWuPVceQ'
 
-print(TOKEN)
 client.run(TOKEN)
