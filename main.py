@@ -6,23 +6,14 @@ import os
 import discord
 from datetime import datetime, timedelta
 
-# TOKEN donné autre part
+# TOKEN donne autre part
 
 CHANNEL_ID = 648637884555067428
 
-pleinDetoiles = "°˖✧◝(⁰▿⁰)◜✧˖°"
+pleinDetoiles = "etoiles"
 
 client = discord.Client()
 
-'''
-def deleteMessage(message):
-	await message.channel.purge(limit=1)
-	print("Message supprimé")
-
-def deleteMessage(message):
-	await message.channel.purge(limit=1)
-	print("Message supprimé")
-'''
 @client.event
 async def on_message(message):
     ignored = True
@@ -63,6 +54,7 @@ async def on_ready():
     print('------')
 
 #TOKEN = os.environ('TOKEN')
+TOKEN = 'NjQ5MTQxODY0NzIwNzYwODYy.Xd6NEw.qb2i8TPUkTWoNPaPRnlCWuPVceQ'
 
-print("token : NjQ5MTQxODY0NzIwNzYwODYy.Xd5cnQ.qU-yeJrZGGdSet0QPPdrGBfKYWY")
-client.run("NjQ5MTQxODY0NzIwNzYwODYy.Xd5cnQ.qU-yeJrZGGdSet0QPPdrGBfKYWY")
+print("token : ",TOKEN)
+client.run(TOKEN)
