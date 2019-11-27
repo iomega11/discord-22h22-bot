@@ -5,7 +5,7 @@
 import discord
 from datetime import datetime, timedelta
 
-TOKEN = "NjQ5MTQxODY0NzIwNzYwODYy.Xd4jQw.znHSp-L6FN4gVGv-upe9h4ihAIE"
+TOKEN = "NjQ5MTQxODY0NzIwNzYwODYy.Xd5cnQ.qU-yeJrZGGdSet0QPPdrGBfKYWY"
 
 CHANNEL_ID = 648637884555067428
 
