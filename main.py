@@ -62,4 +62,7 @@ async def on_ready():
     print(client.user.id)
     print('------')
 
-client.run(os.environ.get('TOKEN'))
+TOKEN = os.environ('TOKEN')
+
+print("token : ",TOKEN)
+client.run(TOKEN)
