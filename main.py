@@ -37,7 +37,7 @@ async def on_message(message):
         ignored = False
         await message.channel.send("pong")
     elif ((":weshalors:" in message.content.lower()) or ("wesh alors" in message.content.lower())):
-        msg = ':weshalors: {0.author.mention} !'.format(message)
+        msg = ':weshalors:' + (' {0.author.mention} !'.format(message)
         ignored = False
         await message.channel.send(msg)
     elif (client.user.mentioned_in(message)):
