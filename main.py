@@ -54,7 +54,7 @@ async def on_ready():
     print('------')
 
 #TOKEN = os.environ('TOKEN')
-TOKEN = NjQ5MTQxODY0NzIwNzYwODYy.Xd5qUA.jgMd3_shOzJl8ybkBgFcjn-exPc
+TOKEN = 'NjQ5MTQxODY0NzIwNzYwODYy.Xd5qUA.jgMd3_shOzJl8ybkBgFcjn-exPc'
 #TOKEN = 'NjQ5MTQxODY0NzIwNzYwODYy.Xd6NEw.qb2i8TPUkTWoNPaPRnlCWuPVceQ'
 
 print("token : ",TOKEN)
