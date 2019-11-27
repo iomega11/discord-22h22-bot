@@ -53,7 +53,7 @@ async def on_ready():
     print(client.user.id)
     print('------')
 
-TOKEN = os.environ.get('TOKEN')
+TOKEN = os.environ.get('TOKEN').replace(" ", "")
 #TOKEN = 'NjQ5MTQxODY0NzIwNzYwODYy.Xd5qUA.jgMd3_shOzJl8ybkBgFcjn-exPc'
 #TOKEN = 'NjQ5MTQxODY0NzIwNzYwODYy.Xd6PzQ.3NoCs81Gqd8QX3sJ_tOm4eNw_tA'
 #TOKEN = 'NjQ5MTQxODY0NzIwNzYwODYy.Xd6NEw.qb2i8TPUkTWoNPaPRnlCWuPVceQ'
