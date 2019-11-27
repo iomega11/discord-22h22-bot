@@ -1,37 +1,25 @@
-#!/usr/bin/env python3
+# Work with Python 3.6
+import discord
 
-import json
-from urllib import request
-from urllib.error import HTTPError
+TOKEN = 'NjQ5MTQxODY0NzIwNzYwODYy.Xd4ewA.B1AIYlhdrDfa9AkKM91ps069uDE'
 
+client = discord.Client()
 
-WEBHOOK_URL = 'https://discordapp.com/api/webhooks/648965427380355112/rZ0mJRrKu8DsDBniuCptMP-sIjIsRsPGMfTXqCYIMDGsVt7NuESjFA2SyxfzLxTI--u2'
+@client.event
+async def on_message(message):
+    # we do not want the bot to reply to itself
+    if message.author == client.user:
+        return
 
-# La payload
-payload = {
-    'content': "Salut les z'agrumes ! Ça zeste ?"
-}
+    if message.content.startswith('!hello'):
+        msg = 'Hello {0.author.mention}'.format(message)
+        await client.send_message(message.channel, msg)
 
-# Les paramètres d'en-tête de la requête
-headers = {
-    'Content-Type': 'application/json',
-    'user-agent': 'Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127 Firefox/2.0.0.11'
-}
+@client.event
+async def on_ready():
+    print('Logged in as')
+    print(client.user.name)
+    print(client.user.id)
+    print('------')
 
-# Enfin on construit notre requête
-req = request.Request(url=WEBHOOK_URL,
-                      data=json.dumps(payload).encode('utf-8'),
-                      headers=headers,
-                      method='POST')
-
-# Puis on l'émet !
-try:
-    response = request.urlopen(req)
-    print(response.status)
-    print(response.reason)
-    print(response.headers)
-except HTTPError as e:
-    print('ERROR')
-    print(e.reason)
-    print(e.hdrs)
-    print(e.file.read())
+client.run(TOKEN)
