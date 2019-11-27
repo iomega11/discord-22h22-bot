@@ -58,5 +58,5 @@ TOKEN = os.environ.get('TOKEN')
 #TOKEN = 'NjQ5MTQxODY0NzIwNzYwODYy.Xd6PzQ.3NoCs81Gqd8QX3sJ_tOm4eNw_tA'
 #TOKEN = 'NjQ5MTQxODY0NzIwNzYwODYy.Xd6NEw.qb2i8TPUkTWoNPaPRnlCWuPVceQ'
 
-print("token : ",TOKEN)
+print("token : '",TOKEN,"'")
 client.run(TOKEN)
