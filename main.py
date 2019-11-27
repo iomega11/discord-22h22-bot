@@ -61,4 +61,4 @@ async def on_ready():
     print(client.user.id)
     print('------')
 
-client.run(TOKEN)
+client.run(os.environ.get(TOKEN))
