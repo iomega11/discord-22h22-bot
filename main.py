@@ -54,11 +54,9 @@ async def on_ready():
     print('------')
 
 TOKEN = os.environ['TOKEN']
-if(len(TOKEN)!=39):
-    TOKEN = TOKEN[1:38]
 #TOKEN = 'NjQ5MTQxODY0NzIwNzYwODYy.Xd5qUA.jgMd3_shOzJl8ybkBgFcjn-exPc'
 #TOKEN = 'NjQ5MTQxODY0NzIwNzYwODYy.Xd6PzQ.3NoCs81Gqd8QX3sJ_tOm4eNw_tA'
 #TOKEN = 'NjQ5MTQxODY0NzIwNzYwODYy.Xd6NEw.qb2i8TPUkTWoNPaPRnlCWuPVceQ'
 
-print("token : '",TOKEN,"'")
+print(TOKEN)
 client.run(TOKEN)
