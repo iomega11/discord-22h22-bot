@@ -20,7 +20,7 @@ client = discord.Client()
 fichierHelp = open("help.txt","r") # Fichier contenant les commandes possibles et la version du bot
 help = fichierHelp.read()
 version = fichierHelp.readline(1)
-close(fichierHelp)
+fichierHelp.close()
 
 @client.event
 async def on_message(message):
