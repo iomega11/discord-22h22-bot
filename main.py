@@ -76,6 +76,7 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('------')
+    print("Omega : ",OWNERID)
     user = client.get_user(OWNERID)
     await user.send("Le bot vient d'être lancé.")
 
