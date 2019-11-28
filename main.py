@@ -72,13 +72,17 @@ async def on_message(message):
 
 @client.event
 async def on_ready():
-    print('Logged in as')
-    print(client.user.name)
-    print(client.user.id)
+    print('Connecté.')
+    print('Nom : ',client.user.name)
+    print('ID : ',client.user.id)
     print('------')
     print("Omega : ",OWNERID)
     user = client.get_user(OWNERID)
-    await user.send("Le bot vient d'être lancé.")
+    if(user is None): # Pas trouvé
+        user = await fetch_user(OWNERID)
+    if(user is None): # Pas trouvé
+        print("Impossible de trouver Omega.")
+    else : await user.send("Le bot vient d'être lancé.")
 
 
 client.run(TOKEN)
