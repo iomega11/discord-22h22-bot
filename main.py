@@ -7,12 +7,20 @@ import discord
 from datetime import datetime, timedelta
 
 # TOKEN donne autre part
+TOKEN = os.environ['TOKEN']
 
-CHANNEL_22H22_ID = 648637884555067428
+OWNERID = os.environ['OWNERID'] # Mon ID (Omega) pour recevoir un message quand le bot est lancé
+
+CHANNEL_22H22_ID = os.environ['CHANNEL_22H22_ID'] # ID du channel 22h22
 
 pleinDetoiles = "°˖✧◝(⁰▿⁰)◜✧˖°"
 
 client = discord.Client()
+
+fichierHelp = open("help.txt","r") # Fichier contenant les commandes possibles et la version du bot
+help = fichierHelp.read()
+version = fichierHelp.readLine(1)
+close(fichierHelp)
 
 @client.event
 async def on_message(message):
@@ -21,23 +29,31 @@ async def on_message(message):
     if (message.author == client.user or message.author.bot):
         ignored = False
         return
-    elif (message.content.startswith('!ninja')):
+    elif (message.content.startswith('.ninja')):
         ignored = False
         msgSent = await message.channel.send("~ninja~")
         await msgSent.delete()
         await message.delete()
         print("Message supprimé")
-    elif(message.content.startswith('!ecrire')):
+    elif(message.content.startswith('.ecrire')):
         ignored = False
         messageAenvoyer = message.content[7:]
         await message.delete()
         print("Envoi d'un message : ",messageAenvoyer)
         await message.channel.send(messageAenvoyer)
+    elif(message.content.startswith('.help')):
+        ignored = False
+        print('Demande de help par  : {0.author.mention}. '.format(message))
+        await message.channel.send(help)
+    elif(message.content.startswith('.version')):
+        ignored = False
+        print('Demande de versionp par  : {0.author.mention}. '.format(message))
+        await message.channel.send(version)
     elif ("ping" in message.content.lower()):
         ignored = False
         await message.channel.send("pong")
     elif ((":weshalors:" in message.content.lower()) or ("wesh alors" in message.content.lower())):
-        msg = ':weshalors:' + ' {0.author.mention} !'.format(message)
+        msg = 'Wesh alors' + ' {0.author.mention} !'.format(message)
         ignored = False
         await message.channel.send(msg)
     elif (client.user.mentioned_in(message)):
@@ -50,7 +66,7 @@ async def on_message(message):
         if(now.hour != 21 or now.minute != 22):
         	await message.delete()
     if(ignored):
-        print("Message ignored.")
+        print("Message ignored :")
         print("Id du channel : ",message.channel.id)
         print("Message : ",message.content)		
 
@@ -60,7 +76,8 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('------')
+    user = client.get_user(OWNERID)
+    await user.send('')
 
-TOKEN = os.environ['TOKEN']
 
 client.run(TOKEN)
