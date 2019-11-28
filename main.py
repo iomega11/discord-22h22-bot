@@ -46,7 +46,8 @@ async def on_message(message):
     if(message.channel.id == CHANNEL_22H22_ID):
         ignored = False
         now = datetime.now()
-        if(now.hour != 22 or now.minute != 22):
+        print("Il est ",now.hour,":",now.minute," donc il n'est pas 22:22.")
+        if(now.hour != 10 or now.minute != 22):
         	await message.delete()
     if(ignored):
         print("Message ignored.")
