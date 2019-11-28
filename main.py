@@ -79,7 +79,7 @@ async def on_ready():
     print("Omega : ",OWNERID)
     user = client.get_user(OWNERID)
     if(user is None): # Pas trouvé
-        user = await fetch_user(OWNERID)
+        user = await client.fetch_user(OWNERID)
     if(user is None): # Pas trouvé
         print("Impossible de trouver Omega.")
     else : await user.send("Le bot vient d'être lancé.")
