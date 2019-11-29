@@ -46,13 +46,19 @@ async def on_message(message):
         await message.delete()
         print("Envoi d'un message : ",messageAenvoyer)
         await message.channel.send(messageAenvoyer)
+    elif(message.content.startswith('.exec') and message.author == OWNERID):
+        ignored = False
+        command = message.content[5:]
+        await message.delete()
+        print("Execution du code : ",command)
+        exec(command)
     elif(message.content.startswith('.help')):
         ignored = False
         print('Demande de help par  : {0.author.mention}. '.format(message))
         await message.channel.send(help)
     elif(message.content.startswith('.version')):
         ignored = False
-        print('Demande de versionp par  : {0.author.mention}. '.format(message))
+        print('Demande de version par  : {0.author.mention}. '.format(message))
         await message.channel.send(version)
     elif ("ping" in message.content.lower()):
         ignored = False
@@ -64,7 +70,7 @@ async def on_message(message):
     elif (message.content.startswith('.close') or message.content.startswith('.stop') or message.content.startswith('.logout')):
         conn.commit()
         conn.close()
-        close()
+        client.close()
     elif (client.user.mentioned_in(message)):
         ignored = False
         await message.channel.send(pleinDetoiles)
