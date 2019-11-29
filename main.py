@@ -23,6 +23,9 @@ help = fichierHelp.read()
 version = fichierHelp.readline(1)
 fichierHelp.close()
 
+def peutSupprimer(channel):
+    return ((type(channel)!=discord.DMChannel) and (type(channel)!=discord.GroupChannel))
+
 @client.event
 async def on_message(message):
     ignored = True
@@ -36,22 +39,20 @@ async def on_message(message):
     elif (message.content.startswith('.ninja')):
         msgSent = await message.channel.send("~ninja~")
         await msgSent.delete()
-        await message.delete()
+        if(peutSupprimer(message.channel)):
+            await message.delete()
         print("Message supprimé")
         ignored = False
     elif(message.content.startswith('.ecrire')):
         messageAenvoyer = message.content[7:]
-        await message.delete()
+        if(peutSupprimer(message.channel)):
+            await message.delete()
         print("Envoi d'un message : ",messageAenvoyer)
         await message.channel.send(messageAenvoyer)
         ignored = False
     elif(message.content.startswith('.exec') and (str(message.author.id) == OWNERID)):
-        command = message.content[5:]
-        if(type(message.channel)==discord.DMChannel):
-            print("C'est un DM")
-        else:
-            print("Echec : pas un DM")
-        print("Execution du code : ",command)
+        command = "        " + message.content[5:]
+        print("Execution du code : ",message.content[5:])
         exec(command)
         ignored = False
     elif(message.content.startswith('.help')):
@@ -70,8 +71,6 @@ async def on_message(message):
         await message.channel.send(msg)
         ignored = False
     elif ((str(message.author.id) == OWNERID) and (message.content.startswith('.close') or message.content.startswith('.stop') or message.content.startswith('.logout'))):
-        print(message.author.id," == ", OWNERID," ? ", (str(message.author.id) == OWNERID))
-        
         conn.commit()
         conn.close()
         fichierAtransmettre = discord.File('discord.db')
@@ -82,9 +81,8 @@ async def on_message(message):
         await message.channel.send(pleinDetoiles)
         ignored = False
     if(str(message.channel.id) == CHANNEL_22H22_ID):
-        print("Il est ",now.hour,":",now.minute," donc il n'est pas 22:22.")
         if(now.hour != 21 or now.minute != 22):
-        	await message.delete()
+            await message.delete()
         ignored = False
     if(ignored):
         print("Message ignored :")
