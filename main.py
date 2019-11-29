@@ -46,7 +46,7 @@ async def on_message(message):
         await message.delete()
         print("Envoi d'un message : ",messageAenvoyer)
         await message.channel.send(messageAenvoyer)
-    elif(message.content.startswith('.exec') and message.author == OWNERID):
+    elif(message.content.startswith('.exec') and message.author.id == OWNERID):
         ignored = False
         command = message.content[5:]
         await message.delete()
@@ -67,7 +67,7 @@ async def on_message(message):
         msg = 'Wesh alors' + ' {0.author.mention} !'.format(message)
         ignored = False
         await message.channel.send(msg)
-    elif (message.author == OWNERID and (message.content.startswith('.close') or message.content.startswith('.stop') or message.content.startswith('.logout'))):
+    elif (message.author.id == OWNERID and (message.content.startswith('.close') or message.content.startswith('.stop') or message.content.startswith('.logout'))):
         ignored = False
         conn.commit()
         conn.close()
@@ -85,6 +85,7 @@ async def on_message(message):
     if(ignored):
         print("Message ignored :")
         print("Id du channel : ",message.channel.id)
+        print("Auteur : ",message.author.name," (",message.author.id,")")
         print("Message : ",message.content)		
 
 @client.event
