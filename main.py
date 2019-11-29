@@ -67,12 +67,13 @@ async def on_message(message):
         msg = 'Wesh alors' + ' {0.author.mention} !'.format(message)
         ignored = False
         await message.channel.send(msg)
-    elif (message.content.startswith('.close') or message.content.startswith('.stop') or message.content.startswith('.logout')):
+    elif (message.author == OWNERID and (message.content.startswith('.close') or message.content.startswith('.stop') or message.content.startswith('.logout'))):
+        ignored = False
         conn.commit()
         conn.close()
         fichierAtransmettre = discord.File('discord.db')
-        message.channel.send(content=None,file=fichierAtransmettre)
-        client.close()
+        await message.channel.send("Le bot va s'arreter. Voila les logs :",file=fichierAtransmettre)
+        await client.close()
     elif (client.user.mentioned_in(message)):
         ignored = False
         await message.channel.send(pleinDetoiles)
