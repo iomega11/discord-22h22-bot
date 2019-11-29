@@ -27,7 +27,8 @@ fichierHelp.close()
 async def on_message(message):
     ignored = True
     now = datetime.now()
-    c.execute("INSERT INTO TABLE logs VALUES (?,?,?,?,?,?,?,?,?)",now.year,now.month,now.day,now.hour,now.minute,now.second,message.author,message.channel,message.content)
+    ligne = [now.year,now.month,now.day,now.hour,now.minute,now.second,message.author,message.channel,message.content]
+    c.execute("INSERT INTO TABLE logs VALUES (?,?,?,?,?,?,?,?,?)",ligne)
     #(annee , mois , jour , heure , minute , seconde , auteur , salon , message )")
     # we do not want the bot to reply to itself
     if (message.author == client.user or message.author.bot):
