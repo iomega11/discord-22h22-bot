@@ -70,6 +70,7 @@ async def on_message(message):
     elif (message.content.startswith('.close') or message.content.startswith('.stop') or message.content.startswith('.logout')):
         conn.commit()
         conn.close()
+        message.channel.send(content=None,file=File('discord.db'))
         client.close()
     elif (client.user.mentioned_in(message)):
         ignored = False
