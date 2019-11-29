@@ -81,7 +81,7 @@ async def on_message(message):
     elif (client.user.mentioned_in(message)):
         await message.channel.send(pleinDetoiles)
         ignored = False
-    if(message.channel.id == CHANNEL_22H22_ID):
+    if(str(message.channel.id) == CHANNEL_22H22_ID):
         print("Il est ",now.hour,":",now.minute," donc il n'est pas 22:22.")
         if(now.hour != 21 or now.minute != 22):
         	await message.delete()
