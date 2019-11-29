@@ -5,6 +5,7 @@
 import os
 import discord
 from datetime import datetime, timedelta
+import sqlite3
 
 # TOKEN donne autre part
 TOKEN = os.environ['TOKEN']
@@ -25,6 +26,9 @@ fichierHelp.close()
 @client.event
 async def on_message(message):
     ignored = True
+    now = datetime.now()
+    c.execute("INSERT INTO TABLE logs VALUES (?,?,?,?,?,?,?,?,?)",now.year,now.month,now.day,now.hour,now.minute,now.second,message.author,message.channel,message.content)
+    #(annee , mois , jour , heure , minute , seconde , auteur , salon , message )")
     # we do not want the bot to reply to itself
     if (message.author == client.user or message.author.bot):
         ignored = False
@@ -56,12 +60,15 @@ async def on_message(message):
         msg = 'Wesh alors' + ' {0.author.mention} !'.format(message)
         ignored = False
         await message.channel.send(msg)
+    elif (message.content.startswith('.close') or message.content.startswith('.stop') or message.content.startswith('.logout')):
+        conn.commit()
+        conn.close()
+        close()
     elif (client.user.mentioned_in(message)):
         ignored = False
         await message.channel.send(pleinDetoiles)
     if(message.channel.id == CHANNEL_22H22_ID):
         ignored = False
-        now = datetime.now()
         print("Il est ",now.hour,":",now.minute," donc il n'est pas 22:22.")
         if(now.hour != 21 or now.minute != 22):
         	await message.delete()
@@ -77,12 +84,17 @@ async def on_ready():
     print('ID : ',client.user.id)
     print('------')
     print("Omega : ",OWNERID)
-    user = client.get_user(OWNERID)
-    if(user is None): # Pas trouvé
-        user = await client.fetch_user(OWNERID)
-    if(user is None): # Pas trouvé
-        print("Impossible de trouver Omega.")
-    else : await user.send("Le bot vient d'être lancé.")
+    user = await client.fetch_user(OWNERID)
+    await user.send("Le bot vient d'être lancé.")
 
+
+# Se connecter a la base de donnees
+conn = sqlite3.connect('discord.db')
+c = conn.cursor()
+# Verifier si les tables existent
+# Le cas contraire, les creer
+c.execute("CREATE TABLE IF NOT EXISTS channels (nom text, id text)")
+c.execute("CREATE TABLE IF NOT EXISTS users (nom text, id text)")
+c.execute("CREATE TABLE IF NOT EXISTS logs (annee integer, mois integer, jour integer, heure integer, minute integer, seconde integer, auteur text, salon text, message text)")
 
 client.run(TOKEN)
