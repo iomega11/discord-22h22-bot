@@ -32,58 +32,57 @@ async def on_message(message):
     #(annee , mois , jour , heure , minute , seconde , auteur , salon , message )")
     # we do not want the bot to reply to itself
     if (message.author == client.user or message.author.bot):
-        ignored = False
         return
     elif (message.content.startswith('.ninja')):
-        ignored = False
         msgSent = await message.channel.send("~ninja~")
         await msgSent.delete()
         await message.delete()
         print("Message supprimé")
+        return
     elif(message.content.startswith('.ecrire')):
-        ignored = False
         messageAenvoyer = message.content[7:]
         await message.delete()
         print("Envoi d'un message : ",messageAenvoyer)
         await message.channel.send(messageAenvoyer)
-    elif(message.content.startswith('.exec') and message.author.id == OWNERID):
-        ignored = False
+        return
+    elif(message.content.startswith('.exec') and (str(message.author.id) == OWNERID)):
         command = message.content[5:]
         await message.delete()
         print("Execution du code : ",command)
         exec(command)
+        return
     elif(message.content.startswith('.help')):
-        ignored = False
         print('Demande de help par  : {0.author.mention}. '.format(message))
         await message.channel.send(help)
+        return
     elif(message.content.startswith('.version')):
-        ignored = False
         print('Demande de version par  : {0.author.mention}. '.format(message))
         await message.channel.send(version)
+        return
     elif ("ping" in message.content.lower()):
-        ignored = False
         await message.channel.send("pong")
+        return
     elif ((":weshalors:" in message.content.lower()) or ("wesh alors" in message.content.lower())):
         msg = 'Wesh alors' + ' {0.author.mention} !'.format(message)
-        ignored = False
         await message.channel.send(msg)
-    elif ( (message.content.startswith('.close') or message.content.startswith('.stop') or message.content.startswith('.logout'))):
+        return
+    elif ((str(message.author.id) == OWNERID) and (message.content.startswith('.close') or message.content.startswith('.stop') or message.content.startswith('.logout'))):
         print(message.author.id," == ", OWNERID," ? ", (str(message.author.id) == OWNERID))
         
-        ignored = False
         conn.commit()
         conn.close()
         fichierAtransmettre = discord.File('discord.db')
         await message.channel.send("Le bot va s'arreter. Voila les logs :",file=fichierAtransmettre)
         await client.close()
+        return
     elif (client.user.mentioned_in(message)):
-        ignored = False
         await message.channel.send(pleinDetoiles)
+        return
     if(message.channel.id == CHANNEL_22H22_ID):
-        ignored = False
         print("Il est ",now.hour,":",now.minute," donc il n'est pas 22:22.")
         if(now.hour != 21 or now.minute != 22):
         	await message.delete()
+        return
     if(ignored):
         print("Message ignored :")
         print("Id du channel : ",message.channel.id)
@@ -96,7 +95,6 @@ async def on_ready():
     print('Nom : ',client.user.name)
     print('ID : ',client.user.id)
     print('------')
-    print("Omega : ",OWNERID)
     user = await client.fetch_user(OWNERID)
     await user.send("Le bot vient d'être lancé.")
 
