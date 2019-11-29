@@ -38,34 +38,37 @@ async def on_message(message):
         await msgSent.delete()
         await message.delete()
         print("Message supprimé")
-        return
+        ignored = False
     elif(message.content.startswith('.ecrire')):
         messageAenvoyer = message.content[7:]
         await message.delete()
         print("Envoi d'un message : ",messageAenvoyer)
         await message.channel.send(messageAenvoyer)
-        return
+        ignored = False
     elif(message.content.startswith('.exec') and (str(message.author.id) == OWNERID)):
         command = message.content[5:]
-        await message.delete()
+        if(type(message.channel)==discord.DMChannel):
+            print("C'est un DM")
+        else:
+            print("Echec : pas un DM")
         print("Execution du code : ",command)
         exec(command)
-        return
+        ignored = False
     elif(message.content.startswith('.help')):
         print('Demande de help par  : {0.author.mention}. '.format(message))
         await message.channel.send(help)
-        return
+        ignored = False
     elif(message.content.startswith('.version')):
         print('Demande de version par  : {0.author.mention}. '.format(message))
         await message.channel.send(version)
-        return
+        ignored = False
     elif ("ping" in message.content.lower()):
         await message.channel.send("pong")
-        return
+        ignored = False
     elif ((":weshalors:" in message.content.lower()) or ("wesh alors" in message.content.lower())):
         msg = 'Wesh alors' + ' {0.author.mention} !'.format(message)
         await message.channel.send(msg)
-        return
+        ignored = False
     elif ((str(message.author.id) == OWNERID) and (message.content.startswith('.close') or message.content.startswith('.stop') or message.content.startswith('.logout'))):
         print(message.author.id," == ", OWNERID," ? ", (str(message.author.id) == OWNERID))
         
@@ -74,15 +77,15 @@ async def on_message(message):
         fichierAtransmettre = discord.File('discord.db')
         await message.channel.send("Le bot va s'arreter. Voila les logs :",file=fichierAtransmettre)
         await client.close()
-        return
+        ignored = False
     elif (client.user.mentioned_in(message)):
         await message.channel.send(pleinDetoiles)
-        return
+        ignored = False
     if(message.channel.id == CHANNEL_22H22_ID):
         print("Il est ",now.hour,":",now.minute," donc il n'est pas 22:22.")
         if(now.hour != 21 or now.minute != 22):
         	await message.delete()
-        return
+        ignored = False
     if(ignored):
         print("Message ignored :")
         print("Id du channel : ",message.channel.id)
