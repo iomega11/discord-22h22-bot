@@ -67,7 +67,8 @@ async def on_message(message):
         msg = 'Wesh alors' + ' {0.author.mention} !'.format(message)
         ignored = False
         await message.channel.send(msg)
-    elif (message.author.id == OWNERID and (message.content.startswith('.close') or message.content.startswith('.stop') or message.content.startswith('.logout'))):
+    elif ( (message.content.startswith('.close') or message.content.startswith('.stop') or message.content.startswith('.logout'))):
+        print(message.author.id," == ", OWNERID," ? ", (message.author.id == OWNERID))
         ignored = False
         conn.commit()
         conn.close()
