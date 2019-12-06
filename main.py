@@ -26,7 +26,7 @@ fichierHelp.close()
 
 # Event necessaire au timer de 22h22
 stopFlag = Event()
-
+'''
 def attendreJusquA(self,hours,minutes):
 	d = date.today()
 	t = time(hours, minutes)
@@ -44,12 +44,12 @@ class MyThread(Thread):
         self.stopped = event
 
     def run(self):
-            attendreJusquA(self,22,15)
-            user = await client.fetch_user(OWNERID)
-            await user.send("Le bot vient d'être lancé.")
+        attendreJusquA(self,22,15)
+        user = await client.fetch_user(OWNERID)
+        await user.send("Le bot vient d'être lancé.")
 
 thread = MyThread(stopFlag) # Thread qui gere le timer
-
+'''
 def peutSupprimer(channel):
     return ((type(channel)!=discord.DMChannel) and (type(channel)!=discord.GroupChannel))
 
