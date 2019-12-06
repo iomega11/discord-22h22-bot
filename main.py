@@ -5,9 +5,11 @@
 import os
 import discord
 from threading import Thread, Event
-from datetime import date, time, datetime, timedelta
+from datetime import date, datetime, timedelta
 import sqlite3
-
+import asyncio
+import schedule
+import time
 # TOKEN donne autre part
 TOKEN = os.environ['TOKEN']
 
@@ -26,30 +28,15 @@ fichierHelp.close()
 
 # Event necessaire au timer de 22h22
 stopFlag = Event()
-'''
-def attendreJusquA(self,hours,minutes):
-	d = date.today()
-	t = time(hours, minutes)
-	timeToStart = datetime.combine(d, t)
-	now = datetime.now()
-	if(timeToStart > now): # L'heure est depassee
-		timeToStart.replace(day = timeToStart.day + 1)
-	delta = timeToStart - now
-	print("Il me faut attendre ",int(delta.seconds / 3600)," heures, ",int(delta.seconds / 60)," minutes et ",int(delta.seconds % 60)," secondes.")
-	self.stopped.wait(delta.seconds)
+LOOP = None
+user = None
+def message22h22():
+    co = asyncio.run_coroutine_threadsafe(
+            client.get_channel(CHANNEL_22H22_ID) \
+                .send("Il n'est pas 22h22."),
+            LOOP)	
+    co.result()
 
-class MyThread(Thread):
-    def __init__(self, event):
-        Thread.__init__(self)
-        self.stopped = event
-
-    def run(self):
-        attendreJusquA(self,22,15)
-        user = await client.fetch_user(OWNERID)
-        await user.send("Le bot vient d'être lancé.")
-
-thread = MyThread(stopFlag) # Thread qui gere le timer
-'''
 def peutSupprimer(channel):
     return ((type(channel)!=discord.DMChannel) and (type(channel)!=discord.GroupChannel))
 
@@ -117,15 +104,49 @@ async def on_message(message):
         print("Auteur : ",message.author.name," (",message.author.id,")")
         print("Message : ",message.content)		
 
+def aff():
+    print("eee")
+
 @client.event
 async def on_ready():
     print('Connecté.')
     print('Nom : ',client.user.name)
     print('ID : ',client.user.id)
     print('------')
-    thread.start()
+    LOOP = asyncio.new_event_loop()
+    asyncio.set_event_loop(LOOP)
+    
+    #thread.start()
 
+class MyThread(Thread):
+    def __init__(self, event):
+        Thread.__init__(self)
+        self.stopped = event
+        LOOP = asyncio.new_event_loop()
+        asyncio.set_event_loop(LOOP)
 
+    def run(self):
+        while True:
+      	  schedule.run_pending()
+      	  time.sleep(1)
+        #attendreJusquA(self,22,53)
+		
+#		asyncio.run_coroutine_threadsafe(
+   #         client.get_channel(CHANNEL_22H22) \
+     #           .send(propaganda.random_propaganda()),
+      #      LOOP)
+        #asyncio.run_coroutine_threadsafe(
+         # #  client.fetch_user(OWNERID) \
+            #    .send("ca marche !"),
+            #LOOP)	
+        #co.result()
+    #    user = await client.fetch_user(OWNERID)
+     #   await user.send("Le bot vient d'être lancé.")
+
+thread = MyThread(stopFlag) # Thread qui gere le timer
+thread.start()
+
+schedule.every().day.at("23:30").do(message22h22)
 # Se connecter a la base de donnees
 conn = sqlite3.connect('discord.db')
 c = conn.cursor()
