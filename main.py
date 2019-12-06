@@ -146,7 +146,7 @@ class MyThread(Thread):
 thread = MyThread(stopFlag) # Thread qui gere le timer
 thread.start()
 
-schedule.every().day.at("23:30").do(message22h22)
+schedule.every().day.at("23:32").do(message22h22)
 # Se connecter a la base de donnees
 conn = sqlite3.connect('discord.db')
 c = conn.cursor()
