@@ -4,7 +4,8 @@
 
 import os
 import discord
-from datetime import datetime, timedelta
+from threading import Thread, Event
+from datetime import date, time, datetime, timedelta
 import sqlite3
 
 # TOKEN donne autre part
@@ -22,6 +23,32 @@ fichierHelp = open("help.txt","r") # Fichier contenant les commandes possibles e
 help = fichierHelp.read()
 version = fichierHelp.readline(1)
 fichierHelp.close()
+
+# Event necessaire au timer de 22h22
+stopFlag = Event()
+
+def attendreJusquA(self,hours,minutes):
+	d = date.today()
+	t = time(hours, minutes)
+	timeToStart = datetime.combine(d, t)
+	now = datetime.now()
+	if(timeToStart > now): # L'heure est depassee
+		timeToStart.replace(day = timeToStart.day + 1)
+	delta = timeToStart - now
+	print("Il me faut attendre ",int(delta.seconds / 3600)," heures, ",int(delta.seconds / 60)," minutes et ",int(delta.seconds % 60)," secondes.")
+	self.stopped.wait(delta.seconds)
+
+class MyThread(Thread):
+    def __init__(self, event):
+        Thread.__init__(self)
+        self.stopped = event
+
+    def run(self):
+            attendreJusquA(self,22,15)
+            user = await client.fetch_user(OWNERID)
+            await user.send("Le bot vient d'être lancé.")
+
+thread = MyThread(stopFlag) # Thread qui gere le timer
 
 def peutSupprimer(channel):
     return ((type(channel)!=discord.DMChannel) and (type(channel)!=discord.GroupChannel))
@@ -51,8 +78,8 @@ async def on_message(message):
         await message.channel.send(messageAenvoyer)
         ignored = False
     elif((str(message.author.id) == OWNERID) and message.content.startswith('.exec') and (str(message.author.id) == OWNERID)):
-        command = "        " + message.content[5:]
-        print("Execution du code : ",message.content[5:])
+        command = "        " + message.content[6:]
+        print("Execution du code : ",message.content[6:])
         exec(command)
         ignored = False
     elif(message.content.startswith('.help')):
@@ -96,8 +123,7 @@ async def on_ready():
     print('Nom : ',client.user.name)
     print('ID : ',client.user.id)
     print('------')
-    user = await client.fetch_user(OWNERID)
-    await user.send("Le bot vient d'être lancé.")
+    thread.start()
 
 
 # Se connecter a la base de donnees
