@@ -43,14 +43,14 @@ async def on_message(message):
             await message.delete()
         print("Message supprimé")
         ignored = False
-    elif((str(message.author.id) == OWNERID) && message.content.startswith('.ecrire')):
+    elif((str(message.author.id) == OWNERID) and message.content.startswith('.ecrire')):
         messageAenvoyer = message.content[7:]
         if(peutSupprimer(message.channel)):
             await message.delete()
         print("Envoi d'un message : ",messageAenvoyer)
         await message.channel.send(messageAenvoyer)
         ignored = False
-    elif((str(message.author.id) == OWNERID) && message.content.startswith('.exec') and (str(message.author.id) == OWNERID)):
+    elif((str(message.author.id) == OWNERID) and message.content.startswith('.exec') and (str(message.author.id) == OWNERID)):
         command = "        " + message.content[5:]
         print("Execution du code : ",message.content[5:])
         exec(command)
