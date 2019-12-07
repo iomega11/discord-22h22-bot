@@ -1,4 +1,4 @@
-Bot Nelly version 0.1.0.
+﻿Bot Nelly version 0.2.0.
 Commandes disponibles :
 .ninja : Affiche un message et le supprime juste après (supprime aussi la commande). Marrant si on veut taguer quelqu'un sans qu'il le sache.
 .help : Affiche ce message.
