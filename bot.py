@@ -11,6 +11,7 @@ import utils
 
 OWNERID = os.environ['OWNERID']
 CHANNEL_22H22_ID = os.environ['CHANNEL_22H22_ID']
+CHANNEL_ANNONCES_SOIREVISIONS_ID = os.environ['CHANNEL_ANNONCES_SOIREVISIONS_ID']
 
 LOOP = asyncio.new_event_loop()
 asyncio.set_event_loop(LOOP)
@@ -52,15 +53,18 @@ class Bot(discord.Client):
 
 	async def on_message(client,message):
 		ignored = True
+        
+		# on ne veut pas (encore) que le bot se reponde a lui meme
+		if (message.author == client.user or message.author.bot):
+			return
+            
+            
 		now = datetime.now()
 		ligne = [now.year,now.month,now.day,now.hour,now.minute,now.second,str(message.author),str(message.channel),message.content]
 		c.execute("INSERT INTO logs VALUES (?,?,?,?,?,?,?,?,?)",ligne)
 		#(annee, mois, jour, heure, minute, seconde, auteur, salon, message)
 		
-		# we do not want the bot to reply to itself
-		if (message.author == client.user or message.author.bot):
-			return
-		elif (message.content.startswith('.ninja')):
+		if (message.content.startswith('.ninja')):
 			msgSent = await message.channel.send("~ninja~")
 			await msgSent.delete()
 			if(peutSupprimer(message.channel)):
@@ -87,7 +91,7 @@ class Bot(discord.Client):
 			print('Demande de version par  : {0.author.mention}. '.format(message))
 			await message.channel.send(utils.version())
 			ignored = False
-		elif ("ping" in message.content.lower()):
+		elif ("ping" in message.content.lower() and str(message.channel.id) != CHANNEL_ANNONCES_SOIREVISIONS_ID):
 			await message.channel.send("pong")
 			ignored = False
 		elif ((":weshalors:" in message.content.lower()) or ("wesh alors" in message.content.lower())):
@@ -101,7 +105,7 @@ class Bot(discord.Client):
 			await message.channel.send("Le bot va s'arreter. Voila les logs :",file=fichierAtransmettre)
 			await client.close()
 			ignored = False
-		elif (client.user.mentioned_in(message)):
+		elif (client.user.mentioned_in(message) and not message.mention_everyone):
 			await message.channel.send(pleinDetoiles)
 			ignored = False
 		if(str(message.channel.id) == CHANNEL_22H22_ID):
