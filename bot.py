@@ -5,6 +5,7 @@ from threading import Thread, Event
 from datetime import date, datetime, timedelta
 import asyncio
 import schedule
+import psycopg2
 
 import utils
 
