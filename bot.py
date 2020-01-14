@@ -53,7 +53,7 @@ class Bot(discord.Client):
         user = await client.fetch_user(OWNERID)
         await user.send("Le bot vient d'être lancé.")
 
-	async def on_message(client,message):
+    async def on_message(client,message):
         try:
             ignored = True
             # on ne veut pas (encore) que le bot se reponde a lui meme
