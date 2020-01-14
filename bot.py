@@ -104,7 +104,7 @@ class Bot(discord.Client):
             # a changer pour fonctionner avec postgresql
 			#fichierAtransmettre = discord.File('discord.db')
 			#await message.channel.send("Le bot va s'arreter. Voila les logs :",file=fichierAtransmettre)
-            await message.channel.send("Au revoir :)")
+			await message.channel.send("Au revoir :)")
 			await client.close()
 			ignored = False
 		elif (client.user.mentioned_in(message) and not message.mention_everyone):

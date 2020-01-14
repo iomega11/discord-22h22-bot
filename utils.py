@@ -15,11 +15,11 @@ def version():
 	return version
 	
 def initDB():
-    import os
-    import psycopg2
+	import os
+	import psycopg2
 	# Se connecter a la base de donnees
-    DATABASE_URL = os.environ['DATABASE_URL']
-    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+	DATABASE_URL = os.environ['DATABASE_URL']
+	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 	c = conn.cursor()
 	# Verifier si les tables existent
 	# Le cas contraire, les creer
