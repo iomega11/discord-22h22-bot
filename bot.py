@@ -47,7 +47,7 @@ class Bot(discord.Client):
         print('ID : ',client.user.id)
         print('------')
         c.execute("SELECT COUNT(*) FROM logs")
-        print("La base de donnees contient ", cur.fetchone()[0], "entrees.")
+        print("La base de donnees contient ", c.fetchone()[0], "entrees.")
         schedule.every().day.at(hour22h22).do(message22h22, client=client)
         schedule.every().day.at(hour22h23).do(message22h23, client=client)
         user = await client.fetch_user(OWNERID)
