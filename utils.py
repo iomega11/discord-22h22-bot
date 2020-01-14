@@ -1,7 +1,3 @@
-
-
-
-
 def help():
 	fichierHelp = open("help.txt","r") # Fichier contenant les commandes possibles et la version du bot
 	help = fichierHelp.read()
@@ -29,7 +25,7 @@ def initDB():
 	return conn,c
     
 def initDBlite():
-    import sqlite3
+	import sqlite3
 	# Se connecter a la base de donnees
 	conn = sqlite3.connect('discord.db')
 	c = conn.cursor()
