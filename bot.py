@@ -61,9 +61,9 @@ class Bot(discord.Client):
             
 		now = datetime.now()
 		ligne = [now.year,now.month,now.day,now.hour,now.minute,now.second,str(message.author),str(message.channel),message.content]
-		c.execute("INSERT INTO logs VALUES (?,?,?,?,?,?,?,?,?)",ligne)
+		#c.execute("INSERT INTO logs VALUES (?,?,?,?,?,?,?,?,?)",ligne)
 		#(annee, mois, jour, heure, minute, seconde, auteur, salon, message)
-		
+		c.execute("INSERT INTO logs(annee, mois, jour, heure, minute, seconde, auteur, salon, message) VALUES(%s)",ligne)
 		if (message.content.startswith('.ninja')):
 			msgSent = await message.channel.send("~ninja~")
 			await msgSent.delete()
