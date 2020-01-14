@@ -1,2 +1,3 @@
 discord.py
 schedule
+psycopg2-binary
