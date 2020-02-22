@@ -15,7 +15,7 @@ def version():
 def tg():
 	nb = len(open("repartie.txt").readlines(  ))
 	fichierRepartie = open("repartie.txt","r") # Fichier contenant les reponses possibles a un 'tg'
-	choix = random.randint(0,nb)
+	choix = random.randint(0,nb-1)
 	for i in range(choix):
 		fichierRepartie.readline()
 	repartie = fichierRepartie.readline()
