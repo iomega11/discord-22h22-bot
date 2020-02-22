@@ -17,9 +17,9 @@ def tg():
 	fichierRepartie = open("repartie.txt","r") # Fichier contenant les reponses possibles a un 'tg'
 	choix = random.randint(0,nb)
 	for i in range(choix):
-		fichierHelp.readline()
-	repartie = fichierHelp.readline()
-	fichierHelp.close()
+		fichierRepartie.readline()
+	repartie = fichierRepartie.readline()
+	fichierRepartie.close()
 	return repartie	
 
 def initDB():
