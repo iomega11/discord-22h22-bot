@@ -93,6 +93,9 @@ class Bot(discord.Client):
                 print('Demande de version par  : {0.author.mention}. '.format(message))
                 await message.channel.send(utils.version())
                 ignored = False
+            elif (" tg " in message.content.lower() and str(message.channel.id) != CHANNEL_ANNONCES_SOIREVISIONS_ID):
+                await message.channel.send("wow parle mieux stp")
+                ignored = False
             elif ("ping" in message.content.lower() and str(message.channel.id) != CHANNEL_ANNONCES_SOIREVISIONS_ID):
                 await message.channel.send("pong")
                 ignored = False
