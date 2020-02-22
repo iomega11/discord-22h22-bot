@@ -13,11 +13,11 @@ def version():
 	return version
 
 def tg():
-    nb = len(open("repartie.txt").readlines(  ))
+	nb = len(open("repartie.txt").readlines(  ))
 	fichierRepartie = open("repartie.txt","r") # Fichier contenant les reponses possibles a un 'tg'
-    choix = random.randint(0,nb)
-    for i in range(choix):
-        fichierHelp.readline()
+	choix = random.randint(0,nb)
+	for i in range(choix):
+		fichierHelp.readline()
 	repartie = fichierHelp.readline()
 	fichierHelp.close()
 	return repartie	
