@@ -97,7 +97,6 @@ class Bot(discord.Client):
                 or " tg" in message.content.lower()
                 or "tg " in message.content.lower()
                 or message.content == "tg") and str(message.channel.id) != CHANNEL_ANNONCES_SOIREVISIONS_ID):
-                await message.channel.send("wow parle mieux stp")
                 await message.channel.send(utils.tg())
                 ignored = False
             elif ("ping" in message.content.lower() and str(message.channel.id) != CHANNEL_ANNONCES_SOIREVISIONS_ID):
