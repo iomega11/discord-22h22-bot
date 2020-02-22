@@ -1,3 +1,5 @@
+import random
+
 def help():
 	fichierHelp = open("help.txt","r") # Fichier contenant les commandes possibles et la version du bot
 	help = fichierHelp.read()
@@ -9,7 +11,17 @@ def version():
 	version = fichierHelp.readline()
 	fichierHelp.close()
 	return version
-	
+
+def tg():
+    nb = len(open("repartie.txt").readlines(  ))
+	fichierRepartie = open("repartie.txt","r") # Fichier contenant les reponses possibles a un 'tg'
+    choix = random.randint(0,nb)
+    for i in range(choix):
+        fichierHelp.readline()
+	repartie = fichierHelp.readline()
+	fichierHelp.close()
+	return repartie	
+
 def initDB():
 	import os
 	import psycopg2
