@@ -66,7 +66,7 @@ class Bot(discord.Client):
             #c.execute("INSERT INTO logs VALUES (?,?,?,?,?,?,?,?,?)",ligne)
             #(annee, mois, jour, heure, minute, seconde, auteur, salon, message)
             c.execute("INSERT INTO logs(annee, mois, jour, heure, minute, seconde, auteur, salon, message) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)",ligne)
-			conn.commit()
+            conn.commit()
             if(str(message.channel.id) == CHANNEL_22H22_ID):
                 if(now.hour != 21 or now.minute != 22):
                     await message.delete()
