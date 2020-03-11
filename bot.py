@@ -66,7 +66,12 @@ class Bot(discord.Client):
             #c.execute("INSERT INTO logs VALUES (?,?,?,?,?,?,?,?,?)",ligne)
             #(annee, mois, jour, heure, minute, seconde, auteur, salon, message)
             c.execute("INSERT INTO logs(annee, mois, jour, heure, minute, seconde, auteur, salon, message) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)",ligne)
-            if (message.content.startswith('.ninja')):
+			conn.commit()
+            if(str(message.channel.id) == CHANNEL_22H22_ID):
+                if(now.hour != 21 or now.minute != 22):
+                    await message.delete()
+                ignored = False	
+            elif (message.content.startswith('.ninja')):
                 msgSent = await message.channel.send("~ninja~")
                 await msgSent.delete()
                 if(peutSupprimer(message.channel)):
@@ -96,10 +101,10 @@ class Bot(discord.Client):
             elif ((" tg " in message.content.lower()
                 or " tg" in message.content.lower()
                 or "tg " in message.content.lower()
-                or message.content == "tg") and str(message.channel.id) != CHANNEL_ANNONCES_SOIREVISIONS_ID):
+                or message.content.lower() == "tg") and str(message.channel.id) != CHANNEL_ANNONCES_SOIREVISIONS_ID):
                 await message.channel.send(utils.tg())
                 ignored = False
-            elif ("ping" in message.content.lower() and str(message.channel.id) != CHANNEL_ANNONCES_SOIREVISIONS_ID):
+            elif ("ping" in message.content.lower() and not ":ping:" in message.content.lower() and str(message.channel.id) != CHANNEL_ANNONCES_SOIREVISIONS_ID):
                 await message.channel.send("pong")
                 ignored = False
             elif ((":weshalors:" in message.content.lower()) or ("wesh alors" in message.content.lower())):
@@ -118,10 +123,6 @@ class Bot(discord.Client):
             elif (client.user.mentioned_in(message) and not message.mention_everyone):
                 await message.channel.send(pleinDetoiles)
                 ignored = False
-            if(str(message.channel.id) == CHANNEL_22H22_ID):
-                if(now.hour != 21 or now.minute != 22):
-                    await message.delete()
-                ignored = False	
                 
             if(ignored):
                 print("Message ignored :")
