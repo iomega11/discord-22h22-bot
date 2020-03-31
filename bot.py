@@ -2,7 +2,7 @@
 import os
 import discord
 from threading import Thread, Event
-from datetime import date, datetime, timedelta
+from datetime import datetime
 import asyncio
 import schedule
 import psycopg2
@@ -24,8 +24,14 @@ pleinDetoiles = "°˖✧◝(⁰▿⁰)◜✧˖°"
 msg22h22 = "Il est 22h22, c'est parti ! Qui lancera les hostilités ?"
 msg22h23 = "Et c'est fini pour aujourd'hui ! A demain !"
 
-hour22h22 = os.environ['HOUR_22']
-hour22h23 = os.environ['HOUR_23']
+summer_time = bool(os.environ['summer_time'])
+
+if summer_time:
+	hour22h22 = "20:22"
+	hour22h23 = "20:23"
+else:
+	hour22h22 = "21:22"
+	hour22h23 = "21:23"
 
 def message22h22(client):
 	co = asyncio.run_coroutine_threadsafe(
