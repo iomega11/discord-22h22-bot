@@ -1,6 +1,9 @@
-﻿Bot Nelly version 0.2.1.
+﻿Bot Nelly version 0.2.2.
 Commandes disponibles :
 .ninja : Affiche un message et le supprime juste après (supprime aussi la commande). Marrant si on veut taguer quelqu'un sans qu'il le sache.
+Si vous écrivez "ping", le bot vous répondra "pong".
+Si vous dites "Wesh alors" il répondra aussi !
+Si vous dites un gros mot, le bot se fâchera :( 
 .help : Affiche ce message.
 .version : Affiche la version du bot.
 Proposez des idées d'amélioration !
