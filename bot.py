@@ -71,7 +71,7 @@ class Bot(discord.Client):
 			#print(emoji.remove_emojis(message.content))
 			if(str(message.channel.id) == CHANNEL_22H22_ID):
 				if(now.hour != hour22h22[:2] or now.minute != hour22h22[3:]):
-					print(now.hour, ":", now.minute, " != " hour22h22[:2], ":", hour22h22[3:]
+					print(now.hour, ":", now.minute, " != " hour22h22[:2], ":", hour22h22[3:])
 					await message.delete()
 				ignored = False	
 			elif (message.content.startswith('.ninja')):
