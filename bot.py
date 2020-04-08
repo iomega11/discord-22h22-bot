@@ -20,8 +20,9 @@ asyncio.set_event_loop(LOOP)
 
 conn,c = utils.initDB()
 
-pleinDetoiles = "°˖✧◝(⁰▿⁰)◜✧˖°"
-msg22h22 = "Il est 22h22, c'est parti ! Qui lancera les hostilités ?"
+# pleinDetoiles = "°˖✧◝(⁰▿⁰)◜✧˖°"
+pleinDetoiles = "Oui ?"
+msg22h22 = "Il est 22h22, c'est parti ! Déchainez vous !"
 msg22h23 = "Et c'est fini pour aujourd'hui ! A demain !"
 
 summer_time = bool(os.environ['summer_time'])
@@ -33,17 +34,29 @@ else:
 	hour22h22 = "21:22"
 	hour22h23 = "21:23"
 
-def message22h22(client):
+def eviterDoublons(client, channel_id, message):
+	'''
+	Retourne True si le message en parametre a envoye a deja
+	ete envoye sur le channel passe en parametre
+	'''
 	co = asyncio.run_coroutine_threadsafe(
-		client.get_channel(int(CHANNEL_22H22_ID)).send(msg22h22),
+		client.get_channel(int(channel_id)).fetch_message(channel.last_message_id)),
 		LOOP)
-	co.result()
+	return co.result().content == message
+
+def message22h22(client):
+	if not eviterDoublons(client, CHANNEL_22H22_ID, message22h22):
+		co = asyncio.run_coroutine_threadsafe(
+			client.get_channel(int(CHANNEL_22H22_ID)).send(msg22h22),
+			LOOP)
+		co.result()
 	
 def message22h23(client):
-	co = asyncio.run_coroutine_threadsafe(
-		client.get_channel(int(CHANNEL_22H22_ID)).send(msg22h23),
-		LOOP)
-	co.result()
+	if not eviterDoublons(client, CHANNEL_22H22_ID, message22h23):
+		co = asyncio.run_coroutine_threadsafe(
+			client.get_channel(int(CHANNEL_22H22_ID)).send(msg22h23),
+			LOOP)
+		co.result()
 
 def peutSupprimer(channel):
 	return ((type(channel)!=discord.DMChannel) and (type(channel)!=discord.GroupChannel))
@@ -75,8 +88,8 @@ class Bot(discord.Client):
 			c.execute("INSERT INTO logs(annee, mois, jour, heure, minute, seconde, auteur, salon, message) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)",ligne)
 			conn.commit()
 			#print(emoji.remove_emojis(message.content))
-			if(str(message.channel.id) == CHANNEL_22H22_ID):
-				if(now.hour != hour22h22[:2] or now.minute != hour22h22[3:]):
+			if str(message.channel.id) == CHANNEL_22H22_ID:
+				if now.hour != int(hour22h22[:2]) or now.minute != int(hour22h22[3:]):
 					print(now.hour, ":", now.minute, " != ", hour22h22[:2], ":", hour22h22[3:])
 					await message.delete()
 				ignored = False	
