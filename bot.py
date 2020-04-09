@@ -40,7 +40,7 @@ def eviterDoublons(client, channel_id, text_to_compare):
 	ete envoye sur le channel passe en parametre
 	'''
 	co = asyncio.run_coroutine_threadsafe(
-		client.get_channel(int(channel_id)).fetch_message(channel.last_message_id), LOOP)
+		client.get_channel(int(channel_id)).fetch_message(client.get_channel(int(channel_id)).last_message_id), LOOP)
 	print(co.result().content)
 	print("!=")
 	print(text_to_compare)
