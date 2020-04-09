@@ -27,6 +27,8 @@ msg22h23 = "Et c'est fini pour aujourd'hui ! A demain !"
 
 summer_time = bool(os.environ['summer_time'])
 
+est_22h22 = False
+
 if summer_time:
 	hour22h22 = "20:22"
 	hour22h23 = "20:23"
@@ -34,31 +36,22 @@ else:
 	hour22h22 = "21:22"
 	hour22h23 = "21:23"
 
-def eviterDoublons(client, bd, channel_id, text_to_compare):
-	'''
-	Retourne True si le message en parametre a envoye a deja
-	ete envoye sur le channel passe en parametre
-	'''
-	bd.execute("SELECT message FROM logs WHERE auteur = %s AND salon = %s ORDER BY ID",[client.user,str(channel_id)])
-	result = bd.fetchall()
-	print(result[len(result)-1][0])
-	print("!=")
-	print(text_to_compare)
-	return result[len(result)-1] == text_to_compare
 
-def message22h22(client, bd):
-	if not eviterDoublons(client, bd, CHANNEL_22H22_ID, message22h22):
+def message22h22(client):
+	if not est_22h22:
 		co = asyncio.run_coroutine_threadsafe(
 			client.get_channel(int(CHANNEL_22H22_ID)).send(msg22h22),
 			LOOP)
 		co.result()
+        est_22h22 = True
 	
-def message22h23(client, bd):
-	if not eviterDoublons(client, bd, CHANNEL_22H22_ID, message22h23):
+def message22h23(client):
+	if est_22h22:
 		co = asyncio.run_coroutine_threadsafe(
 			client.get_channel(int(CHANNEL_22H22_ID)).send(msg22h23),
 			LOOP)
 		co.result()
+        est_22h22 = False
 
 def peutSupprimer(channel):
 	return ((type(channel)!=discord.DMChannel) and (type(channel)!=discord.GroupChannel))
@@ -71,8 +64,8 @@ class Bot(discord.Client):
 		print('------')
 		c.execute("SELECT COUNT(*) FROM logs")
 		print("La base de donnees contient ", c.fetchone()[0], "entrees.")
-		schedule.every().day.at(hour22h22).do(message22h22, client=client, bd=c)
-		schedule.every().day.at(hour22h23).do(message22h23, client=client, bd=c)
+		schedule.every().day.at(hour22h22).do(message22h22, client=client)
+		schedule.every().day.at(hour22h23).do(message22h23, client=client)
 		user = await client.fetch_user(OWNERID)
 		await user.send("Le bot vient d'être lancé.")
 
@@ -129,7 +122,6 @@ class Bot(discord.Client):
 				await message.channel.send(utils.tg())
 				ignored = False
 			elif ("ping" in message.content.lower() and not emoji.message_contains_emoji_with_ping(message.content.lower()) and str(message.channel.id) != CHANNEL_ANNONCES_SOIREVISIONS_ID):
-				eviterDoublons(client, c, message.channel.id, "pong lol")
 				await message.channel.send("pong")
 				ignored = False
 			elif ((":weshalors:" in message.content.lower()) or ("wesh alors" in message.content.lower())):
