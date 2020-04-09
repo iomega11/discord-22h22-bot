@@ -34,17 +34,17 @@ else:
 	hour22h22 = "21:22"
 	hour22h23 = "21:23"
 
-def eviterDoublons(client, channel_id, text_to_compare):
+def eviterDoublons(client, bd, channel_id, text_to_compare):
 	'''
 	Retourne True si le message en parametre a envoye a deja
 	ete envoye sur le channel passe en parametre
 	'''
-	co = asyncio.run_coroutine_threadsafe(
-		client.get_channel(int(channel_id)).fetch_message(client.get_channel(int(channel_id)).last_message_id), LOOP)
-	print(co.result().content)
+	bd.execute("SELECT message FROM logs WHERE auteur = %s AND salon = %s ORDER BY ID",[client.user,str(channel_id)])
+	result = bd.fetchall()
+	print(result[len(result)-1][0])
 	print("!=")
 	print(text_to_compare)
-	return co.result().content == text_to_compare
+	return result[len(result)-1] == text_to_compare
 
 def message22h22(client):
 	if not eviterDoublons(client, CHANNEL_22H22_ID, message22h22):
