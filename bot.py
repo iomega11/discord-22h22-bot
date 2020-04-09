@@ -34,7 +34,7 @@ else:
 	hour22h22 = "21:22"
 	hour22h23 = "21:23"
 
-def eviterDoublons(client, channel_id, message):
+def eviterDoublons(client, channel_id, text_to_compare):
 	'''
 	Retourne True si le message en parametre a envoye a deja
 	ete envoye sur le channel passe en parametre
@@ -43,8 +43,8 @@ def eviterDoublons(client, channel_id, message):
 		client.get_channel(int(channel_id)).fetch_message(channel.last_message_id), LOOP)
 	print(co.result().content)
 	print("!=")
-	print(message)
-	return co.result().content == message
+	print(text_to_compare)
+	return co.result().content == text_to_compare
 
 def message22h22(client):
 	if not eviterDoublons(client, CHANNEL_22H22_ID, message22h22):
