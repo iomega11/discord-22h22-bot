@@ -41,6 +41,9 @@ def eviterDoublons(client, channel_id, message):
 	'''
 	co = asyncio.run_coroutine_threadsafe(
 		client.get_channel(int(channel_id)).fetch_message(channel.last_message_id), LOOP)
+	print(co.result().content)
+	print("!=")
+	print(message)
 	return co.result().content == message
 
 def message22h22(client):
@@ -126,7 +129,8 @@ class Bot(discord.Client):
 				await message.channel.send(utils.tg())
 				ignored = False
 			elif ("ping" in message.content.lower() and not emoji.message_contains_emoji_with_ping(message.content.lower()) and str(message.channel.id) != CHANNEL_ANNONCES_SOIREVISIONS_ID):
-				await message.channel.send("pong")
+				eviterDoublons(client,messsage.channel, "pong lol")
+                await message.channel.send("pong")
 				ignored = False
 			elif ((":weshalors:" in message.content.lower()) or ("wesh alors" in message.content.lower())):
 				msg = 'Wesh alors' + ' {0.author.mention} !'.format(message)
