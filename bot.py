@@ -130,7 +130,7 @@ class Bot(discord.Client):
 				ignored = False
 			elif ("ping" in message.content.lower() and not emoji.message_contains_emoji_with_ping(message.content.lower()) and str(message.channel.id) != CHANNEL_ANNONCES_SOIREVISIONS_ID):
 				eviterDoublons(client,messsage.channel, "pong lol")
-                await message.channel.send("pong")
+				await message.channel.send("pong")
 				ignored = False
 			elif ((":weshalors:" in message.content.lower()) or ("wesh alors" in message.content.lower())):
 				msg = 'Wesh alors' + ' {0.author.mention} !'.format(message)
