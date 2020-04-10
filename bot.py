@@ -37,7 +37,7 @@ else:
 	hour22h23 = "21:23"
 
 
-def message22h22(client):
+def message22h22(client, est_22h22):
 	if not est_22h22:
 		co = asyncio.run_coroutine_threadsafe(
 			client.get_channel(int(CHANNEL_22H22_ID)).send(msg22h22),
@@ -45,7 +45,7 @@ def message22h22(client):
 		co.result()
 		est_22h22 = True
 	
-def message22h23(client):
+def message22h23(client, est_22h22):
 	if est_22h22:
 		co = asyncio.run_coroutine_threadsafe(
 			client.get_channel(int(CHANNEL_22H22_ID)).send(msg22h23),
@@ -64,8 +64,8 @@ class Bot(discord.Client):
 		print('------')
 		c.execute("SELECT COUNT(*) FROM logs")
 		print("La base de donnees contient ", c.fetchone()[0], "entrees.")
-		schedule.every().day.at(hour22h22).do(message22h22, client=client)
-		schedule.every().day.at(hour22h23).do(message22h23, client=client)
+		schedule.every().day.at(hour22h22).do(message22h22, client=client, est_22h22=est_22h22)
+		schedule.every().day.at(hour22h23).do(message22h23, client=client, est_22h22=est_22h22)
 		user = await client.fetch_user(OWNERID)
 		await user.send("Le bot vient d'être lancé.")
 
