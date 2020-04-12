@@ -36,22 +36,30 @@ else:
 	hour22h22 = "21:22"
 	hour22h23 = "21:23"
 
+def estDoublon(client, channel_id, text_to_compare):
+	'''
+	Retourne True si le message en parametre a envoye a deja
+	ete envoye sur le channel passe en parametre
+	'''
+	c.execute("SELECT message FROM logs WHERE salon = %s AND auteur = %s", [str(channel_id), str(client.user)])
+	result = c.fetchall()
+	last_message = result[len(result)-1][0]
+	return last_message == text_to_compare
 
-def message22h22(client, est_22h22):
-	if not est_22h22:
+
+def message22h22(client):
+	if not estDoublon(client, int(CHANNEL_22H22_ID), msg22h22):
 		co = asyncio.run_coroutine_threadsafe(
 			client.get_channel(int(CHANNEL_22H22_ID)).send(msg22h22),
 			LOOP)
 		co.result()
-		est_22h22 = True
 	
-def message22h23(client, est_22h22):
-	if est_22h22:
+def message22h23(client):
+	if not estDoublon(client, int(CHANNEL_22H22_ID), msg22h23):
 		co = asyncio.run_coroutine_threadsafe(
 			client.get_channel(int(CHANNEL_22H22_ID)).send(msg22h23),
 			LOOP)
 		co.result()
-		est_22h22 = False
 
 def peutSupprimer(channel):
 	return ((type(channel)!=discord.DMChannel) and (type(channel)!=discord.GroupChannel))
@@ -64,24 +72,26 @@ class Bot(discord.Client):
 		print('------')
 		c.execute("SELECT COUNT(*) FROM logs")
 		print("La base de donnees contient ", c.fetchone()[0], "entrees.")
-		schedule.every().day.at(hour22h22).do(message22h22, client=client, est_22h22=est_22h22)
-		schedule.every().day.at(hour22h23).do(message22h23, client=client, est_22h22=est_22h22)
+		schedule.every().day.at(hour22h22).do(message22h22, client=client)
+		schedule.every().day.at(hour22h23).do(message22h23, client=client)
 		user = await client.fetch_user(OWNERID)
 		await user.send("Le bot vient d'être lancé.")
 
 	async def on_message(client,message):
 		try:
 			ignored = True
-			# on ne veut pas (encore) que le bot se reponde a lui meme
-			if (message.author == client.user or message.author.bot):
-				return
 			
 			now = datetime.now()
-			ligne = [now.year,now.month,now.day,now.hour,now.minute,now.second,str(message.author),str(message.channel),message.content]
+			ligne = [now.year,now.month,now.day,now.hour,now.minute,now.second,str(message.author),str(message.channel.id),message.content]
 			#c.execute("INSERT INTO logs VALUES (?,?,?,?,?,?,?,?,?)",ligne)
 			#(annee, mois, jour, heure, minute, seconde, auteur, salon, message)
 			c.execute("INSERT INTO logs(annee, mois, jour, heure, minute, seconde, auteur, salon, message) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)",ligne)
 			conn.commit()
+			
+			# on ne veut pas (encore) que le bot se reponde a lui meme
+			if (message.author == client.user or message.author.bot):
+				return
+			
 			#print(emoji.remove_emojis(message.content))
 			if str(message.channel.id) == CHANNEL_22H22_ID:
 				if now.hour != int(hour22h22[:2]) or now.minute != int(hour22h22[3:]):
