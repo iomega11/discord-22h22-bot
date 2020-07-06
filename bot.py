@@ -67,13 +67,16 @@ def message22h23(client):
 def peutSupprimer(channel):
 	return ((type(channel)!=discord.DMChannel) and (type(channel)!=discord.GroupChannel))
 
+def doitEtreIgnore(channel_actuel):
+	return utils.isPresent(channel_actuel, "ignoredchannels", c)
+
 class Bot(discord.Client):
 	async def on_ready(client):
 		print('Connecté.')
 		print('Nom : ',client.user.name)
 		print('ID : ',client.user.id)
 		print('------')
-		c.execute("SELECT COUNT(*) FROM logs")
+		c.execute("SELECT COUNT(*) FROM ignoredchannels")
 		print("La base de donnees contient ", c.fetchone()[0], "entrees.")
 		schedule.every().day.at(hour22h22).do(message22h22, client=client)
 		schedule.every().day.at(hour22h23).do(message22h23, client=client)
@@ -94,9 +97,11 @@ class Bot(discord.Client):
 			# on ne veut pas (encore) que le bot se reponde a lui meme
 			if (message.author == client.user or message.author.bot):
 				return
-			
+			if doitEtreIgnore(str(message.channel.id)):
+				print("Message posté dans un salon ignoré.")
+				ignored = True
 			#print(emoji.remove_emojis(message.content))
-			if str(message.channel.id) == CHANNEL_22H22_ID:
+			elif str(message.channel.id) == CHANNEL_22H22_ID:
 				if now.hour != int(hour22h22[:2]) or now.minute != int(hour22h22[3:]):
 					print(now.hour, ":", now.minute, " != ", hour22h22[:2], ":", hour22h22[3:])
 					await message.delete()
