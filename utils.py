@@ -35,7 +35,6 @@ def initDB():
 	c.execute("CREATE TABLE IF NOT EXISTS users (nom text, id text)")
 	c.execute("CREATE TABLE IF NOT EXISTS logs (annee integer, mois integer, jour integer, heure integer, minute integer, seconde integer, auteur text, salon text, message text)")
 	c.execute("CREATE TABLE IF NOT EXISTS ignoredchannels (id text)")
-	c.execute("INSERT INTO ignoredchannels VALUES (649351092752220184)")
 	return conn,c
     
 def initDBlite():
@@ -50,12 +49,18 @@ def initDBlite():
 	c.execute("CREATE TABLE IF NOT EXISTS logs (annee integer, mois integer, jour integer, heure integer, minute integer, seconde integer, auteur text, salon text, message text)")
 	return conn,c
 
-
-def isPresent(id, channel, c):
+def show(channel, c):
 	requete = 'SELECT * FROM ' + channel
 	c.execute(requete)
-	result = c.fetchall()
+	return c.fetchall()
+
+def isPresent(id, channel, c):
+	result = show(channel, c)
 	for i in range(len(result)):
 		if result[i][0] == id:
 			return True
 	return False
+
+def add(id, channel, c):
+	requete = 'INSERT INTO ' + channel + ' VALUES (' + id + ')'
+	c.execute(requete)

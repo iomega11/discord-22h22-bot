@@ -70,6 +70,18 @@ def peutSupprimer(channel):
 def doitEtreIgnore(channel_actuel):
 	return utils.isPresent(channel_actuel, "ignoredchannels", c)
 
+def ajouterSalonAignorer(channel_a_ignorer):
+	utils.add(channel_a_ignorer, "ignoredchannels", c)
+	conn.commit()
+
+def afficherSalonsIgnores(client):
+	result = 'Liste des salons que le bot ignore : \n'
+	liste = utils.show("ignoredchannels", c)
+	for i in range(len(liste)):
+		channel = client.get_channel(int(liste[i][0]))
+		result += str(channel) + '\n'
+	return result
+
 class Bot(discord.Client):
 	async def on_ready(client):
 		print('Connecté.')
@@ -105,6 +117,13 @@ class Bot(discord.Client):
 				if now.hour != int(hour22h22[:2]) or now.minute != int(hour22h22[3:]):
 					print(now.hour, ":", now.minute, " != ", hour22h22[:2], ":", hour22h22[3:])
 					await message.delete()
+				ignored = False	
+			elif message.content.lower().startswith('.ignorechannel'):
+				ajouterSalonAignorer(message.content[14:])
+				await message.channel.send('Salon ajouté à la liste des salons à ignorer.')
+				ignored = False	
+			elif message.content.lower().startswith('.showignoredchannels'):
+				await message.channel.send(afficherSalonsIgnores(client))
 				ignored = False	
 			elif (message.content.startswith('.ninja')):
 				msgSent = await message.channel.send("~ninja~")
@@ -152,7 +171,7 @@ class Bot(discord.Client):
 				# a changer pour fonctionner avec postgresql
 				#fichierAtransmettre = discord.File('discord.db')
 				#await message.channel.send("Le bot va s'arreter. Voila les logs :",file=fichierAtransmettre)
-				#await message.channel.send("Au revoir :)")
+				await message.channel.send("Au revoir :)")
 				await client.close()
 				ignored = False
 			elif (client.user.mentioned_in(message) and not message.mention_everyone):
