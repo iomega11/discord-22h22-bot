@@ -118,11 +118,11 @@ class Bot(discord.Client):
 					print(now.hour, ":", now.minute, " != ", hour22h22[:2], ":", hour22h22[3:])
 					await message.delete()
 				ignored = False	
-			elif message.content.lower().startswith('.ignorechannel'):
+			elif message.content.lower().startswith('.ignorechannel') and str(message.author.id) == OWNERID:
 				ajouterSalonAignorer(message.content[14:])
 				await message.channel.send('Salon ajouté à la liste des salons à ignorer.')
 				ignored = False	
-			elif message.content.lower().startswith('.showignoredchannels'):
+			elif message.content.lower().startswith('.showignoredchannels') and str(message.author.id) == OWNERID:
 				await message.channel.send(afficherSalonsIgnores(client))
 				ignored = False	
 			elif (message.content.startswith('.ninja')):
