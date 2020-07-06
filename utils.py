@@ -34,6 +34,7 @@ def initDB():
 	c.execute("CREATE TABLE IF NOT EXISTS channels (nom text, id text)")
 	c.execute("CREATE TABLE IF NOT EXISTS users (nom text, id text)")
 	c.execute("CREATE TABLE IF NOT EXISTS logs (annee integer, mois integer, jour integer, heure integer, minute integer, seconde integer, auteur text, salon text, message text)")
+	c.execute("CREATE TABLE IF NOT EXISTS ignoredchannels (id text)")
 	return conn,c
     
 def initDBlite():

@@ -88,8 +88,8 @@ class Bot(discord.Client):
 			ligne = [now.year,now.month,now.day,now.hour,now.minute,now.second,str(message.author),str(message.channel.id),message.content]
 			#c.execute("INSERT INTO logs VALUES (?,?,?,?,?,?,?,?,?)",ligne)
 			#(annee, mois, jour, heure, minute, seconde, auteur, salon, message)
-			c.execute("INSERT INTO logs(annee, mois, jour, heure, minute, seconde, auteur, salon, message) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)",ligne)
-			conn.commit()
+			#c.execute("INSERT INTO logs(annee, mois, jour, heure, minute, seconde, auteur, salon, message) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)",ligne)
+			#conn.commit()
 			
 			# on ne veut pas (encore) que le bot se reponde a lui meme
 			if (message.author == client.user or message.author.bot):
