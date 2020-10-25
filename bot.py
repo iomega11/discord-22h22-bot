@@ -94,6 +94,7 @@ class Bot(discord.Client):
 		await user.send("Le bot vient d'être lancé.")
 
 	async def on_message(client,message):
+		global conn,c
 		try:
 			ignored = True
 			
@@ -186,7 +187,10 @@ class Bot(discord.Client):
 				print("Auteur : ",message.author.name," (",message.author.id,")")
 				print("Message : ",message.content)		
 
-		except (Exception, psycopg2.DatabaseError) as error:
-			print(error)
+		except psycopg2.DatabaseError as databaseError:
+			conn,c = utils.initDB()
+			raise Exception('Connexion avec la base de données interrompue. Reconnexion effectuée.') 
+		except Exception as exception:
+			print(exception)
 			user = await client.fetch_user(OWNERID)
-			await user.send(error)
+			await user.send(exception)
