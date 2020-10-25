@@ -42,7 +42,6 @@ def estDoublon(client, channel_id, text_to_compare):
 	'''
 	c.execute("SELECT message FROM logs WHERE salon = %s AND auteur = %s", [str(channel_id), str(client.user)])
 	result = c.fetchall()
-	print(result)
 	if not len(result):
 		return False
 	last_message = result[len(result)-1][0]
