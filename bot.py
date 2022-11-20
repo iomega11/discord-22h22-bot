@@ -5,7 +5,6 @@ from threading import Thread, Event
 from datetime import datetime
 import asyncio
 import schedule
-import psycopg2
 
 import utils
 import emoji
@@ -17,23 +16,17 @@ CHANNEL_22H22_ID = os.environ['CHANNEL_22H22_ID']
 LOOP = asyncio.new_event_loop()
 asyncio.set_event_loop(LOOP)
 
-conn,c = utils.initDB()
+conn,c = utils.initDBlite()
 
 # pleinDetoiles = "°˖✧◝(⁰▿⁰)◜✧˖°"
-pleinDetoiles = "Oui ?"
-msg22h22 = "Il est 22h22, c'est parti ! Déchainez vous !"
+pleinDetoiles = "Cyrielle, c'est moi !"
+msg22h22 = "Il est 22h22, c'est parti ! Qui aura le temps de poster un message ?"
 msg22h23 = "Et c'est fini pour aujourd'hui ! A demain !"
-
-summer_time = bool(os.environ['summer_time'])
 
 est_22h22 = False
 
-if summer_time:
-	hour22h22 = "20:22"
-	hour22h23 = "20:23"
-else:
-	hour22h22 = "21:22"
-	hour22h23 = "21:23"
+hour22h22 = "22:22"
+hour22h23 = "22:23"
 
 def estDoublon(client, channel_id, text_to_compare):
 	'''
@@ -108,9 +101,7 @@ class Bot(discord.Client):
 			# on ne veut pas (encore) que le bot se reponde a lui meme
 			if (message.author == client.user or message.author.bot):
 				# On stocke les messages envoyés par le bot, notamment pour éviter les doublons à 22h22
-				ligne = [now.year,now.month,now.day,now.hour,now.minute,now.second,str(message.author),str(message.channel.id),message.content]
-				c.execute("INSERT INTO logs(annee, mois, jour, heure, minute, seconde, auteur, salon, message) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)",ligne)
-				conn.commit()
+				utils.insertEntryInDB(now, str(message.author), str(message.channel.id), message.content, conn, c)
 				return
 			if doitEtreIgnore(str(message.channel.id)):
 				print("Message posté dans un salon ignoré.")
@@ -187,9 +178,6 @@ class Bot(discord.Client):
 				print("Auteur : ",message.author.name," (",message.author.id,")")
 				print("Message : ",message.content)		
 
-		except psycopg2.DatabaseError as databaseError:
-			conn,c = utils.initDB()
-			raise Exception('Connexion avec la base de données interrompue. Reconnexion effectuée.') 
 		except Exception as exception:
 			print(exception)
 			user = await client.fetch_user(OWNERID)
