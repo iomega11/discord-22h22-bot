@@ -47,7 +47,7 @@ def message22h22(client):
 			client.get_channel(int(CHANNEL_22H22_ID)).send(msg22h22),
 			LOOP)
 		co.result()
-	
+
 def message22h23(client):
 	if not estDoublon(client, int(CHANNEL_22H22_ID), msg22h23):
 		co = asyncio.run_coroutine_threadsafe(
@@ -72,6 +72,7 @@ def afficherSalonsIgnores(client):
 		channel = client.get_channel(int(liste[i][0]))
 		result += str(channel) + '\n'
 	return result
+
 
 class Bot(discord.Client):
 	async def on_ready(client):
@@ -132,6 +133,9 @@ class Bot(discord.Client):
 					await message.delete()
 				print("Envoi d'un message : ",messageAenvoyer)
 				await message.channel.send(messageAenvoyer)
+				ignored = False
+			elif(message.content.startswith('.date')):
+				await message.channel.send("Il est " + str(datetime.now()))
 				ignored = False
 			elif((str(message.author.id) == OWNERID) and message.content.startswith('.exec') and (str(message.author.id) == OWNERID)):
 				command = message.content[6:]
