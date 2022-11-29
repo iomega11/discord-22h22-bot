@@ -33,7 +33,8 @@ def estDoublon(client, channel_id, text_to_compare):
 	Retourne True si le message en parametre a envoye a deja
 	ete envoye sur le channel passe en parametre
 	'''
-	c.execute("SELECT message FROM logs WHERE salon = %s AND auteur = %s", [str(channel_id), str(client.user)])
+	conn,c = utils.initDBlite()
+	c.execute("SELECT message FROM logs WHERE salon = ? AND auteur = ?", [str(channel_id), str(client.user)])
 	result = c.fetchall()
 	if not len(result):
 		return False
@@ -102,6 +103,7 @@ class Bot(discord.Client):
 			# on ne veut pas (encore) que le bot se reponde a lui meme
 			if (message.author == client.user or message.author.bot):
 				# On stocke les messages envoyés par le bot, notamment pour éviter les doublons à 22h22
+				conn,c = utils.initDBlite()
 				utils.insertEntryInDB(now, str(message.author), str(message.channel.id), message.content, conn, c)
 				return
 			if doitEtreIgnore(str(message.channel.id)):
@@ -114,6 +116,7 @@ class Bot(discord.Client):
 					await message.delete()
 				ignored = False	
 			elif message.content.lower().startswith('.ignorechannel') and str(message.author.id) == OWNERID:
+				conn,c = utils.initDBlite()
 				ajouterSalonAignorer(message.content[14:])
 				await message.channel.send('Salon ajouté à la liste des salons à ignorer.')
 				ignored = False	
